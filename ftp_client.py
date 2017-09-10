@@ -50,9 +50,9 @@ class FTP_Client(object):
 
     # attempt to connect
     try:
-      self.ftp = FTP(host)
-    except:
-      print "Unable to connect to {:s}".format(host)
+      self.ftp = FTP(host, timeout=20)
+    except ftplib.all_errors, exc:
+      print "Unable to connect to %s: %s"%(host, exc)
       return
     print "Connected to {:s}".format(host)
 
