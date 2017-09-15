@@ -49,11 +49,18 @@ class FTP_Client(object):
     host = socket.gethostbyname(hostname)
 
     # attempt to connect
-    try:
-      self.ftp = FTP(host, timeout=20)
-    except ftplib.all_errors, exc:
-      print "Unable to connect to %s: %s"%(host, exc)
-      return
+    connect_attempts = 0
+    while connect_attempts < 10:
+      try:
+        self.ftp = FTP(host, timeout=20)
+      except:
+        connect_attempts+=1
+        print "unable to connect to %s.  Attempt %d"%connect_attempts
+        if connect_attempts == 10:
+          print "Giving up connecting to %s as %s"%(host, exc)
+          return
+        pass
+
     print "Connected to {:s}".format(host)
 
     # attempt to login
